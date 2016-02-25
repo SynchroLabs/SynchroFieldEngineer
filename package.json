@@ -8,5 +8,6 @@
     "mssql": "^2.1.1"
   },
   "private": true,
-  "engines": { "synchro": ">= 1.3.0" }
+  "engines": { "synchro": ">= 1.3.0" },
+  "synchroArchiveUrl": "https://github.com/SynchroLabs/SynchroCivics/archive/master.zip"
 }
