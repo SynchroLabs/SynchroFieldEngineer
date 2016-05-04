@@ -85,10 +85,13 @@ function * loadJobs(context, viewModel, agentId)
         }
 
         var connection = new sql.Connection(dbConfig); 
-        yield Synchro.waitForAwaitable(context, connection.connect.bind(connection));
+        yield Synchro.yieldAwaitable(context, function(callback){ connection.connect(callback) });
         var request = connection.request();
         request.input('agentId', sql.VarChar, agentId); // Prevent SQL injection by parameterizing
-        recordset = yield Synchro.waitForAwaitable(context, request.query.bind(request), "select " + fieldList.join(",") + " from Job inner join Customer on Job.CustomerId=CUstomer.Id where AgentId=@agentId");
+        recordset = yield Synchro.yieldAwaitable(context, function(callback)
+        {
+            request.query("select " + fieldList.join(",") + " from Job inner join Customer on Job.CustomerId=CUstomer.Id where AgentId=@agentId", callback);
+        }); 
         viewModel.jobs = [];
         recordset.forEach(function(job)
         {
